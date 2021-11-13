@@ -13,3 +13,6 @@
 [submodule "app/doc_translation/moses-scripts"]
 	path = app/doc_translation/moses-scripts
 	url = https://github.com/marian-nmt/moses-scripts.git
+[submodule "app/doc_translation/m4loc"]
+	path = app/doc_translation/m4loc
+	url = https://github.com/achimr/m4loc.git
