@@ -4,3 +4,12 @@
 [submodule "app/static/hal-browser"]
 	path = app/static/hal-browser
 	url = https://github.com/mikekelly/hal-browser.git
+[submodule "fast_align"]
+	path = fast_align
+	url = https://github.com/clab/fast_align.git
+[submodule "app/doc_translation/fast_align"]
+	path = app/doc_translation/fast_align
+	url = https://github.com/clab/fast_align.git
+[submodule "app/doc_translation/moses-scripts"]
+	path = app/doc_translation/moses-scripts
+	url = https://github.com/marian-nmt/moses-scripts.git
