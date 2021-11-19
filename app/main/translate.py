@@ -1,6 +1,7 @@
 #from app.logging_utils import logged
 from app.model_settings import models
-
+import requests
+import subprocess
 import logging
 log = logging.getLogger(__name__)
 
@@ -20,3 +21,32 @@ def translate_from_to(source, target, text):
         translation = translate_with_model(obj['model'], text, obj['src'], obj['tgt'])
         text = ' '.join(translation).replace('\n ', '\n')
     return translation
+
+def translate_document(src,tgt,filename):
+    #run tikal and m4loc tools on the source document to convert to xliff and extract raw text
+    result = subprocess.run(["/doc_translation//preprocess_tikal.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    with open(filename+".txt") as src_text_f,open(filename+".target","w") as tgt_text_f:
+        src_text=src_text_f.read()
+        trans=translate_from_to(src.split("/")[-1],tgt,src_text)
+        tgt_text_f.write('\n'.join([t.strip() for t in trans if not t.isspace()]))
+    result = subprocess.run(["/doc_translation/preprocess_align.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    with open(filename+".tok") as tok_src_f, open(filename+".target.tok") as tok_tgt_f:
+        tok_src=tok_src_f.read().splitlines()
+        tok_tgt=tok_tgt_f.read().splitlines()
+
+    assert len(tok_src)==len(tok_tgt), "Number of lines in source and translation does not match!"
+    sentences=[]
+    for line_src,line_tgt in zip(tok_src,tok_tgt):
+        sentences.append({'src':{'text':line_src.strip()},'tgt':{'text':line_tgt.strip()}})
+    json_data={"sentences":sentences}
+    print(json_data)
+    r=requests.post("http://{}:{}/".format("localhost","9010"),  json=json_data)
+    with open(filename+".align","w") as align_file:
+        for line in r.json()["sentences"]:
+            align_file.write(line["alignment"]+'\n')
+
+    result = subprocess.run(["/doc_translation/postprocess_tikal.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    #reinsert tags, detokenize, fix
+    return filename.replace(".docx",".out.docx")
