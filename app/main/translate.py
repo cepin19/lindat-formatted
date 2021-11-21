@@ -28,14 +28,17 @@ def translate_document(src,tgt,filename):
 
     with open(filename+".txt") as src_text_f,open(filename+".target","w") as tgt_text_f:
         src_text=src_text_f.read()
+        logging.error("src_text: {}".format(src_text))
         trans=translate_from_to(src.split("/")[-1],tgt,src_text)
+        logging.error("trans: {}".format(trans))
+
         tgt_text_f.write('\n'.join([t.strip() for t in trans if not t.isspace()]))
     result = subprocess.run(["/doc_translation/preprocess_align.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     with open(filename+".tok") as tok_src_f, open(filename+".target.tok") as tok_tgt_f:
         tok_src=tok_src_f.read().splitlines()
         tok_tgt=tok_tgt_f.read().splitlines()
-
+    logging.error("tok_src: {}".format(tok_src))
     assert len(tok_src)==len(tok_tgt), "Number of lines in source and translation does not match!"
     sentences=[]
     for line_src,line_tgt in zip(tok_src,tok_tgt):
