@@ -30,8 +30,12 @@ def translate_document(src,tgt,filename):
         src_text=src_text_f.read().rstrip('\n') #??? why do I have do rstrip?
         logging.error("src_text: {}".format(src_text))
         trans=translate_from_to(src.split("/")[-1],tgt,src_text)
+        #restore leading newlines
+        i=0
+        restore_ws=""
+        while src_text[i].isspace():restore_ws+=src_text[i]
+        trans=restore_ws+trans
         logging.error("trans: {}".format(trans))
-
         #tgt_text_f.write('\n'.join([t.strip() for t in trans if not t.isspace()]))
         tgt_text_f.write(''.join(trans))
     result = subprocess.run(["/doc_translation/preprocess_align.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
