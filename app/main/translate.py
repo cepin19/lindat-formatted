@@ -34,10 +34,10 @@ def translate_document(src,tgt,filename):
         i=0
         restore_ws=""
         while src_text[i].isspace():restore_ws+=src_text[i]
-        trans=restore_ws+trans
+        trans=restore_ws+''.join(trans)
         logging.error("trans: {}".format(trans))
         #tgt_text_f.write('\n'.join([t.strip() for t in trans if not t.isspace()]))
-        tgt_text_f.write(''.join(trans))
+        tgt_text_f.write(trans)
     result = subprocess.run(["/doc_translation/preprocess_align.sh", filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     with open(filename+".tok") as tok_src_f, open(filename+".target.tok") as tok_tgt_f:
