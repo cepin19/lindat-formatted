@@ -35,8 +35,8 @@ def translate_document(src,tgt,filename):
         i=0
         restore_ws=""
         while src_text[i].isspace():
-            i+=1
             restore_ws+=src_text[i]
+            i+=1
         trans=restore_ws+''.join(trans)
         logging.error("trans: {}".format(trans))
         #tgt_text_f.write('\n'.join([t.strip() for t in trans if not t.isspace()]))
