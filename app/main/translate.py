@@ -30,6 +30,7 @@ def translate_document(src,tgt,filename):
         src_text=src_text_f.read().rstrip('\n') #??? why do I have do rstrip?
         logging.error("src_text: {}".format(src_text))
         trans=translate_from_to(src.split("/")[-1],tgt,src_text)
+        logging.error(trans)
         #restore leading newlines
         i=0
         restore_ws=""
