@@ -137,7 +137,12 @@ class AlignerService:
 
     def do(self, data):
         for i in range(len(data["sentences"])):
-            a=self.aligner(' ||| '.join((data["sentences"][i]["src"]["text"], data["sentences"][i]["tgt"]["text"])))
+            src=data["sentences"][i]["src"]["text"]
+            tgt=data["sentences"][i]["tgt"]["text"]
+            if src.isspace() or tgt.isspace()  or src=='' or  tgt=='':
+                a=''
+            else:
+                a=self.aligner(' ||| '.join((data["sentences"][i]["src"]["text"], data["sentences"][i]["tgt"]["text"])))
             data["sentences"][i]["alignment"]=a
         return data
 
