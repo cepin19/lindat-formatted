@@ -33,5 +33,5 @@ perl $m4loc/xliff/fix_markup_ws.pm  ${1}.mos.tok.${src}.spaces < ${1}.target.mos
 #TODO
  paste ${1}.target ${1}.target.mos.fix | python3 fix_fix_markup.py > ${1}.target.mos.detok.fix  #- splits back tokens wrongly joined by fix_markup
 sed -i 's/\s*$/ /g' ${1}.target.mos.detok.fix
-./tikal.sh -lm ${1} -fc okf_openxml -sl ${src} -ie utf8 -oe utf8 -overtrg -from ${1}.target.mos.detok.fix -seg config/defaultSegmentation.srx
+./tikal.sh -lm ${1} -fc okf_openxml@img -sl ${src} -ie utf8 -oe utf8 -overtrg -from ${1}.target.mos.detok.fix -seg config/defaultSegmentation.srx
 
